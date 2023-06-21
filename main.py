@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import pandas as pd
-from getData import (entradaSaida as es)
+import entradaSaida as es
 
 def dijkstra(matriz, vOrigem, vDestino):
     n = len(matriz)

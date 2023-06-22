@@ -1,8 +1,10 @@
 import numpy as np
+from scipy.spatial import Voronoi, voronoi_plot_2d
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import pandas as pd
 import entradaSaida as es
+
 
 def dijkstra(matriz, vOrigem, vDestino):
     n = len(matriz)
@@ -42,8 +44,6 @@ def dijkstra(matriz, vOrigem, vDestino):
 
     print(caminho, custo[vDestino])
 
-
-
 def criar_beacons(dataset):
     beacons = {}
 
@@ -56,8 +56,6 @@ def criar_beacons(dataset):
         beacons[id_beacon] = {'nome': id_beacon, 'coordenadas': (x, y), 'adjacencias': adjacencias}
 
     return beacons
-
-import numpy as np
 
 def listaParaMatriz(adjacencias):
     vertices = sorted(adjacencias.keys())
@@ -75,13 +73,57 @@ def listaParaMatriz(adjacencias):
 
     return matriz
 
+def run_voronoi(beacons):
+    points = [beacon['coordenadas'] for beacon in beacons.values()]  # Extract the coordinates of the vertices
+    vor = Voronoi(points)  # Perform Voronoi tessellation
 
+    voronoi_cells = {}
+    for ridge_points, ridge_vertices in vor.ridge_dict.items():
+        if -1 in ridge_vertices:  # Skip infinite ridges
+            continue
+        
+        v1, v2 = ridge_points
+        vertex1 = points[v1]
+        vertex2 = points[v2]
+        
+        # Calculate the midpoint between the two vertices
+        midpoint = ((vertex1[0] + vertex2[0]) / 2, (vertex1[1] + vertex2[1]) / 2)
+        
+        # Calculate the perpendicular bisector slope
+        if vertex1[0] == vertex2[0]:  # Vertical line
+            slope = None
+        else:
+            slope = (vertex2[1] - vertex1[1]) / (vertex2[0] - vertex1[0])
+            slope = -1 / slope if slope != 0 else None
+        
+        # Extend the line segment until it intersects with the bounding box
+        if slope is None:
+            x = [midpoint[0], midpoint[0]]
+            y = [vor.min_bound[1], vor.max_bound[1]]
+        else:
+            b = midpoint[1] - slope * midpoint[0]
+            x = [vor.min_bound[0], vor.max_bound[0]]
+            y = [slope * xi + b for xi in x]
+        
+        # Store the Voronoi edge as a line segment
+        edge = [(x[0], y[0]), (x[1], y[1])]
+        
+        # Find the corresponding vertex ID for the Voronoi edge
+        vertex_id = None
+        for key, value in beacons.items():
+            if value['coordenadas'] == vertex1 or value['coordenadas'] == vertex2:
+                vertex_id = key
+                break
+        
+        # Add the edge to the corresponding Voronoi cell
+        if vertex_id:
+            if vertex_id not in voronoi_cells:
+                voronoi_cells[vertex_id] = []
+            voronoi_cells[vertex_id].append(edge)
 
+    return voronoi_cells
 
-dataset = pd.read_csv('./Instancias/coords.csv') # Extrair as informações dos beacons
-
-
-
+dataset = pd.read_csv('./coords.csv') # Extrair as informações dos beacons
 
 # Carregar a imagem JPEG como plano de fundo
 plano_fundo = mpimg.imread(r'C:\Users\Felip\Documents\Cenário 3 - Dados\img8.jpg')
@@ -94,8 +136,8 @@ ax.imshow(plano_fundo, extent=[0, 100, 0, 100])  # Definir os limites do plano c
 
 # Plotar os elementos no plano cartesiano
 beacons = criar_beacons(dataset)
+voronoi_cells = run_voronoi(beacons)
 dijkstra(listaParaMatriz(beacons), 1, 19)
-print(beacons.keys())
 
 # Plotar os beacons no plano cartesiano
 for beacon, info in beacons.items():
@@ -106,7 +148,15 @@ for beacon, info in beacons.items():
     ax.annotate(nome, (x, y), xytext=(5, 5), textcoords='offset points')
 
 # Configurar as legendas
-ax.legend()
+#ax.legend()
 
 # Mostrar o plano cartesiano com o plano de fundo
+plt.show()
+
+# Visualize the Voronoi diagram
+fig, ax2 = plt.subplots()
+voronoi_plot_2d(Voronoi([beacon['coordenadas'] for beacon in beacons.values()]), ax2=ax2)
+for cell in voronoi_cells.values():
+    for edge in cell:
+        ax2.plot(*zip(*edge), color='red')  # Plot Voronoi edges
 plt.show()

@@ -126,7 +126,7 @@ def run_voronoi(beacons):
 dataset = pd.read_csv('./coords.csv') # Extrair as informações dos beacons
 
 # Carregar a imagem JPEG como plano de fundo
-plano_fundo = mpimg.imread(r'C:\Users\Felip\Documents\Cenário 3 - Dados\img8.jpg')
+plano_fundo = mpimg.imread(r'planta.jpeg')
 
 # Criar o plano cartesiano
 fig, ax = plt.subplots()

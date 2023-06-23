@@ -153,9 +153,46 @@ for beacon, info in beacons.items():
 # Mostrar o plano cartesiano com o plano de fundo
 plt.show()
 
+points = np.array([
+    [65.25, 35.17],
+    [65.25, 32.5],
+    [78.6, 32.5],
+    [78.6, 38],
+    [75.8, 35.17],
+    [75.8, 42.1],
+    [80, 42.1],
+    [84.6, 38],
+    [84.6, 54.2],
+    [80, 50.25],
+    [35.12, 50.25],
+    [35.12, 54.2]
+])
+
+# Calcular o diagrama de Voronoi
+vor = Voronoi(points)
+
+# Encontrar os vértices externos do diagrama de Voronoi
+# Estes são os pontos que representam os beacons necessários para cobrir a área
+external_vertices = []
+for ridge in vor.ridge_vertices:
+    if -1 in ridge:
+        # Descartar arestas que têm um vértice infinito (-1)
+        continue
+    external_vertices.append(vor.vertices[ridge])
+
+# Calcular a distância entre os beacons e selecionar aqueles com alcance de 8 metros
+beacons = []
+for vertex in external_vertices:
+    distances = np.linalg.norm(points - vertex[:, np.newaxis], axis=2)
+    if np.any(distances <= 8):
+        beacons.append(vertex)
+
+# Imprimir o número mínimo de beacons necessários
+print(beacons)
+
 # Visualize the Voronoi diagram
 fig, ax2 = plt.subplots()
-voronoi_plot_2d(Voronoi([beacon['coordenadas'] for beacon in beacons.values()]), ax2=ax2)
+voronoi_plot_2d(Voronoi(points), ax2=ax2)
 for cell in voronoi_cells.values():
     for edge in cell:
         ax2.plot(*zip(*edge), color='red')  # Plot Voronoi edges

@@ -150,6 +150,8 @@ for beacon, info in beacons.items():
 # Configurar as legendas
 #ax.legend()
 
+plt.grid(True, color='grey', linewidth=0.5)  # Adicionar a grade ao plano cartesiano
+
 # Mostrar o plano cartesiano com o plano de fundo
 plt.show()
 

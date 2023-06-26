@@ -2,6 +2,7 @@ import numpy as np
 
 alcance = 80 #alcance do beacon em metros
 coberturaMin = 3 #cobertura mínima de beacons necessária em um ponto
+cont = 0 #contador de beacons
 
 def calculaNumBeacons(matriz):
     beacons = np.zeros([len(matriz), len(matriz)])
@@ -17,7 +18,7 @@ def adicionaBeacon(matriz, i, j, beacons):
     
     cobertura = 0
 
-    for x in range(-alcance, alcance+1):
+    for x in range(-alcance, alcance+1):    #calcula a melhor cobertura para posições do beacon no eixo x
         if i+x < 0 or i+x >= len(matriz):   #verifica se a posição está dentro da matriz
             continue
         else:
@@ -28,6 +29,21 @@ def adicionaBeacon(matriz, i, j, beacons):
                     cobertura = calculaCobertura(matriz, i+x, j, beacons)
                     posX = i+x
                     posY = j
+
+    for y in range(-alcance, alcance+1):    #calcula a melhor cobertura para posições do beacon no eixo y
+        if j+y < 0 or j+y >= len(matriz[0]):
+            continue
+        else:
+            if matriz[i][j+y] == -1:
+                continue
+            elif beacons[i][j+y] == 0:
+                if calculaCobertura(matriz, i, j+y, beacons) > cobertura:
+                    cobertura = calculaCobertura(matriz, i, j+y, beacons)
+                    posX = i
+                    posY = j+y
+
+    beacons[posX][posY] = cont
+    cont += 1
 
 def calculaCobertura(matriz, i, j, beacons):
     cobertura = 0

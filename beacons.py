@@ -8,7 +8,7 @@ class Beacons:
         self._coberturaMin = coberturaMin
 
         self._beacons = [[-1] * len(matriz[0]) for _ in range(len(matriz))]
-        self._numBeacons = -1
+        self._idBeacons = -1
 
     @property
     def matriz(self):
@@ -51,18 +51,18 @@ class Beacons:
         self._beacons = beacons
 
     @property
-    def numBeacons(self):
-        return self._numBeacons
+    def idBeacons(self):
+        return self._idBeacons
     
-    @numBeacons.setter
-    def numBeacons(self, numBeacons):
-        if numBeacons < -1:
+    @idBeacons.setter
+    def idBeacons(self, idBeacons):
+        if idBeacons < -1:
             raise ValueError("O número de beacons deve ser maior ou igual a -1")
-        self._numBeacons = numBeacons
+        self._idBeacons = idBeacons
 
     def calculaBeacons(self):
         for i in range(len(self._matriz)):
-            for j in range(len(self._matriz)):
+            for j in range(len(self._matriz[0])):
                 if self._matriz[i][j] == -1:  #não faz parte da planta
                     continue 
                 while self._matriz[i][j] < self._coberturaMin: #não tem cobertura de 3 beacons
@@ -88,8 +88,8 @@ class Beacons:
                             posX = i+x
                             posY = j+y
 
-        self._numBeacons += 1
-        self._beacons[posX][posY] = self._numBeacons
+        self._idBeacons += 1
+        self._beacons[posX][posY] = self._idBeacons
 
         #atualiza a cobertura dos pontos ao redor do beacon adicionado
         for x in range(-self._alcance, self._alcance+1):
@@ -118,12 +118,15 @@ class Beacons:
     
     def getMatriz(self):
         return str(np.array(self._matriz))
+    
+    def getNumBeacons(self):
+        return self._idBeacons + 1
 
 
 if __name__ == "__main__":
-    x = 256  # número de linhas
-    y = 256  # número de colunas
-    num_minus_ones = 300  # quantidade de elementos -1
+    x = 80  # número de linhas
+    y = 70  # número de colunas
+    num_minus_ones = 2240  # quantidade de elementos -1
 
     matriz = [[0] * y for _ in range(x)]
 
@@ -138,3 +141,5 @@ if __name__ == "__main__":
 
     beacon.calculaBeacons()
     print(beacon.getBeacons())
+    print(beacon.getMatriz())
+    print(beacon.getNumBeacons())

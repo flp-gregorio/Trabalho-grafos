@@ -10,6 +10,9 @@ class Beacons:
         self._beacons = [[-1] * len(matriz[0]) for _ in range(len(matriz))]
         self._idBeacons = -1
 
+        self._matrizAdjacencias = None
+        self._listaAdjacencias = None
+
     @property
     def matriz(self):
         return self._matriz
@@ -59,6 +62,22 @@ class Beacons:
         if idBeacons < -1:
             raise ValueError("O número de beacons deve ser maior ou igual a -1")
         self._idBeacons = idBeacons
+
+    @property
+    def matrizAdjacencias(self):
+        return self._matrizAdjacencias
+    
+    @matrizAdjacencias.setter
+    def matrizAdjacencias(self, matrizAdjacencias):
+        self._matrizAdjacencias = matrizAdjacencias
+
+    @property
+    def listaAdjacencias(self):
+        return self._listaAdjacencias
+    
+    @listaAdjacencias.setter
+    def listaAdjacencias(self, listaAdjacencias):
+        self._listaAdjacencias = listaAdjacencias
 
     def calculaBeacons(self):
         for i in range(len(self._matriz)):
@@ -112,16 +131,83 @@ class Beacons:
                         cobertura += self._coberturaMin - self._matriz[i+x][j+y]  # adiciona a cobertura do beacon na posição (x, y) com prioridade para os pontos com menor cobertura
 
         return cobertura
+    
+    def matrizAdjacenciasBeacons(self):
+        #cria uma matriz de adjacências dos beacons analisando a matriz de beacons e encontrando os beacons adjacentes
 
+        self._matrizAdjacencias = [[0] * (self._idBeacons+1) for _ in range(self._idBeacons+1)]
+
+        for i in range(len(self._beacons)):
+            for j in range(len(self._beacons[0])):
+                if self._beacons[i][j] == -1:
+                    continue
+                for x in range(-self._alcance, self._alcance+1):
+                    for y in range(-self._alcance, self._alcance+1):
+                        if x**2 + y**2 <= self._alcance**2:
+                            if i+x < 0 or i+x >= len(self._beacons) or j+y < 0 or j+y >= len(self._beacons[0]):
+                                continue
+                            elif self._beacons[i+x][j+y] != -1 and self._beacons[i+x][j+y] != self._beacons[i][j]:
+                                self._matrizAdjacencias[self._beacons[i][j]][self._beacons[i+x][j+y]] = 1
+
+        return np.array(self._matrizAdjacencias)
+    
+    def listaAdjacenciasBeacons(self):
+        #cria uma lista de adjacências dos beacons analisando a matriz de beacons e encontrando os beacons adjacentes
+
+        self._listaAdjacencias = {}
+
+        if self._matrizAdjacencias == None:
+            self.matrizAdjacenciasBeacons() #cria a matriz de adjacências dos beacons
+
+        #transforma a matriz de adjacências em uma lista de adjacências
+        for i in range(len(self._matrizAdjacencias)):
+            self._listaAdjacencias[i] = []
+            for j in range(len(self._matrizAdjacencias)):
+                num = self._matrizAdjacencias[i][j]
+                while num>0:   #se houverem mais arestas, o vértice será repetido
+                    self._listaAdjacencias[i].append(j)
+                    num -= 1
+
+        return self._listaAdjacencias
+
+    def getMatrizAdjacencias(self):
+        if self._matrizAdjacencias == None:
+            return str(np.array(self.matrizAdjacenciasBeacons()))
+        else:
+            return str(np.array(self._matrizAdjacencias))
+
+    def getListaAdjacencias(self):
+        if self._listaAdjacencias == None:
+            return str(self.listaAdjacenciasBeacons())
+        else:
+            return str(self._listaAdjacencias)
+        
     def getBeacons(self):
-        return np.array(self._beacons)
+        if self._idBeacons == -1:
+            return str(np.array(self.calculaBeacons()))
+        else:
+            return str(np.array(self._beacons))
     
     def getMatriz(self):
-        return np.array(self._matriz)
+        return str(np.array(self._matriz))
     
     def getNumBeacons(self):
-        return self._idBeacons + 1
+        return str(self._idBeacons + 1)
+    
+    def __str__(self):
+        str = ""
 
+        str += "Matriz de cobertura:\n"
+        str += self.getMatriz() + "\n\n"
+        str += "Matriz de beacons:\n"
+        str += self.getBeacons() + "\n\n"
+        str += "Número de beacons: " + self.getNumBeacons() + "\n\n"
+        str += "Matriz de adjacências:\n"
+        str += self.getMatrizAdjacencias() + "\n\n"
+        str += "Lista de adjacências:\n"
+        str += self.getListaAdjacencias() + "\n"
+
+        return str
 
 if __name__ == "__main__":
     x = 80  # número de linhas
@@ -137,9 +223,4 @@ if __name__ == "__main__":
         j = random.randint(0, y - 1)
         matriz[i][j] = -1
 
-    beacon = Beacons(matriz, 80, 3)
-
-    beacon.calculaBeacons()
-    print(beacon.getBeacons())
-    print(beacon.getMatriz())
-    print(beacon.getNumBeacons())
+    print(Beacons(matriz, 20, 3))

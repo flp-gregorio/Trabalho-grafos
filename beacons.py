@@ -114,10 +114,10 @@ class Beacons:
         return cobertura
 
     def getBeacons(self):
-        return str(np.array(self._beacons))
+        return np.array(self._beacons)
     
     def getMatriz(self):
-        return str(np.array(self._matriz))
+        return np.array(self._matriz)
     
     def getNumBeacons(self):
         return self._idBeacons + 1

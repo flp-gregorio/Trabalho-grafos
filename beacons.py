@@ -195,19 +195,19 @@ class Beacons:
         return str(self._idBeacons + 1)
     
     def __str__(self):
-        str = ""
+        ret = ""
 
-        str += "Matriz de cobertura:\n"
-        str += self.getMatriz() + "\n\n"
-        str += "Matriz de beacons:\n"
-        str += self.getBeacons() + "\n\n"
-        str += "Número de beacons: " + self.getNumBeacons() + "\n\n"
-        str += "Matriz de adjacências:\n"
-        str += self.getMatrizAdjacencias() + "\n\n"
-        str += "Lista de adjacências:\n"
-        str += self.getListaAdjacencias() + "\n"
+        ret += "Matriz de cobertura:\n"
+        ret += self.getMatriz() + "\n\n"
+        ret += "Matriz de beacons:\n"
+        ret += self.getBeacons() + "\n\n"
+        ret += "Número de beacons: " + self.getNumBeacons() + "\n\n"
+        ret += "Matriz de adjacências:\n"
+        ret += self.getMatrizAdjacencias() + "\n\n"
+        ret += "Lista de adjacências:\n"
+        ret += self.getListaAdjacencias() + "\n"
 
-        return str
+        return ret
 
 if __name__ == "__main__":
     x = 80  # número de linhas

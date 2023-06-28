@@ -37,7 +37,14 @@ for ponto, info in pontos.items():
     ax.plot(x, y, 'ro')  # 'ro' representa o ponto vermelho
     ax.annotate(nome, (x, y), xytext=(5, 5), textcoords='offset points')
 
-print(listaAdjPontos)
+for vertice in listaAdjPontos:
+    for adj in listaAdjPontos[vertice]:
+        for ponto, info in pontos.items():
+            if info['id'] == vertice:
+                x1, y1 = info['coordenadas']
+            if info['id'] == adj:
+                x2, y2 = info['coordenadas']
+        ax.plot([x1, x2], [y1, y2], 'b-')  # 'b-' representa a linha azul
 
 plt.grid(True, color='grey', linewidth=0.5)  # Adicionar a grade ao plano cartesiano
 

@@ -6,6 +6,7 @@ import beacons as bea
 import processamento as proc
 import pickle
 import os.path
+import numpy as np
 
 if not os.path.isfile("Trabalho-grafos/beacons.pickle"):
     matriz = im.image_to_matrix('Trabalho-grafos/planta_com_vazios.png', 72, 64)
@@ -28,7 +29,7 @@ fig, ax = plt.subplots()
 # Definir a imagem JPEG como plano de fundo
 ax.imshow(plano_fundo, extent=[0, 72, 64, 0])  # Definir os limites do plano cartesiano
 
-pontos, listaAdjPontos = proc.criar_pontos(dataset)  # Extrair as informações dos pontos
+pontos, listaAdjPontos, matrizAdjPontos = proc.criar_pontos(dataset)  # Extrair as informações dos pontos
 
 for ponto, info in pontos.items():
     nome = info['nome']
@@ -44,8 +45,8 @@ for vertice in listaAdjPontos:
                 x1, y1 = info['coordenadas']
             if info['id'] == adj:
                 x2, y2 = info['coordenadas']
-        ax.plot([x1, x2], [y1, y2], 'b-')  # 'b-' representa a linha azul
+        ax.plot([x1, x2], [y1, y2], 'b-')   # 'b-' representa a linha azul
 
-plt.grid(True, color='grey', linewidth=0.5)  # Adicionar a grade ao plano cartesiano
+plt.grid(True, color='grey', linewidth=0.5) # Adicionar a grade ao plano cartesiano
 
 plt.show()  # Mostrar o plano cartesiano

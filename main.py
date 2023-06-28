@@ -52,13 +52,13 @@ for vertice in listaAdjPontos:
 for i in range(len(beacons.beacons)):
     for j in range(len(beacons.beacons[0])):
         if beacons.beacons[i][j] != -1:
-            ax.plot(j, i, 'go')  # 'bo' representa o beacon azul
+            ax.plot(j, i, 'go')  # 'go' representa o beacon azul
 
             for adj in beacons.listaAdjacencias[beacons.beacons[i][j]]:
                 for m in range(len(beacons.beacons)):
                     for n in range(len(beacons.beacons[0])):
                         if beacons.beacons[m][n] == adj:
-                            ax.plot([j, n], [i, m], 'g--')  # 'b--' representa a conexão entre beacons em linha tracejada
+                            ax.plot([j, n], [i, m], 'g--')  # 'g--' representa a conexão entre beacons em linha tracejada
 
 plt.grid(True, color='grey', linewidth=0.5) # Adicionar a grade ao plano cartesiano
 

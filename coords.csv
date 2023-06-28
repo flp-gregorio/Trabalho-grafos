@@ -1,4 +1,4 @@
-id,x,y,vertices,adjacencias
+nome,x,y,vertices,adjacencias
 prof1,20,74.5,0,"1,5"
 rampa,33,74.5,1,"0,2,4"
 ldc1,51,74.5,2,"1,3"

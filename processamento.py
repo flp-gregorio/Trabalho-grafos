@@ -61,7 +61,6 @@ def dijkstra(matriz, vOrigem, vDestino):
                     custo[j] = dist
                     rota[j] = v
 
-        # Adicione o seguinte trecho para lidar com arestas de retorno em grafos não direcionados
         for j in range(numVertices):
             if j not in verFechados and matriz[j][v] != -1:
                 aresta = matriz[j][v]

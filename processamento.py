@@ -15,7 +15,7 @@ def criar_pontos(dataset):
 
         pontos[nome] = {'nome': nome, 'coordenadas': (x, y), 'adjacencias': adjacencias, 'id': id}
 
-    matrizAdjacencias = [[0 for _ in range(len(listaAdjacencias))] for _ in range(len(listaAdjacencias))]
+    matrizAdjacencias = [[-1 for _ in range(len(listaAdjacencias))] for _ in range(len(listaAdjacencias))]
 
     for vertice in listaAdjacencias:
         for adj in listaAdjacencias[vertice]:
@@ -33,6 +33,8 @@ def distancia(ponto1, ponto2):
     x2, y2 = ponto2
 
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+import math
 
 def dijkstra(matriz, vOrigem, vDestino):
     numVertices = len(matriz)
@@ -54,6 +56,15 @@ def dijkstra(matriz, vOrigem, vDestino):
         for j in range(numVertices):
             if j not in verFechados and matriz[v][j] != -1:
                 aresta = matriz[v][j]
+                dist = custo[v] + aresta
+                if dist < custo[j]:
+                    custo[j] = dist
+                    rota[j] = v
+
+        # Adicione o seguinte trecho para lidar com arestas de retorno em grafos não direcionados
+        for j in range(numVertices):
+            if j not in verFechados and matriz[j][v] != -1:
+                aresta = matriz[j][v]
                 dist = custo[v] + aresta
                 if dist < custo[j]:
                     custo[j] = dist

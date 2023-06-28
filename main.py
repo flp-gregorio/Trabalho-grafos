@@ -49,4 +49,6 @@ for vertice in listaAdjPontos:
 
 plt.grid(True, color='grey', linewidth=0.5) # Adicionar a grade ao plano cartesiano
 
+print(proc.dijkstra(matrizAdjPontos, 0, 9))
+
 plt.show()  # Mostrar o plano cartesiano

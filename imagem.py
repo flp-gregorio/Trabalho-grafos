@@ -18,6 +18,10 @@ def image_to_matrix(image_path, width, height):
 
     return matrix
 
+def print_matrix(matrix):
+    for row in matrix:
+        print(' '.join('{:2d}'.format(pixel) for pixel in row))
+
 # Exemplo de uso
 image_path = 'Trabalho-grafos/planta_com_vazios.png'
 width = 72
@@ -25,5 +29,4 @@ height = 64
 matrix = image_to_matrix(image_path, width, height)
 
 # Imprime a matriz resultante
-for row in matrix:
-    print(row)
+print_matrix(matrix)

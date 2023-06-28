@@ -15,7 +15,24 @@ def criar_pontos(dataset):
 
         pontos[nome] = {'nome': nome, 'coordenadas': (x, y), 'adjacencias': adjacencias, 'id': id}
 
-    return pontos, listaAdjacencias
+    matrizAdjacencias = [[0 for _ in range(len(listaAdjacencias))] for _ in range(len(listaAdjacencias))]
+
+    for vertice in listaAdjacencias:
+        for adj in listaAdjacencias[vertice]:
+            for ponto, info in pontos.items():
+                if info['id'] == vertice:
+                    x1, y1 = info['coordenadas']
+                if info['id'] == adj:
+                    x2, y2 = info['coordenadas']
+            matrizAdjacencias[vertice][adj] = distancia((x1, y1), (x2, y2))
+
+    return pontos, listaAdjacencias, matrizAdjacencias
+
+def distancia(ponto1, ponto2):
+    x1, y1 = ponto1
+    x2, y2 = ponto2
+
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 def dijkstra(matriz, vOrigem, vDestino):
     numVertices = len(matriz)

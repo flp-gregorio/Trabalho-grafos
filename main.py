@@ -12,6 +12,7 @@ if not os.path.isfile("Trabalho-grafos/beacons.pickle"):
     matriz = im.image_to_matrix('Trabalho-grafos/planta_com_vazios.png', 72, 64)
     beacons = bea.Beacons(matriz, 40, 3)
     beacons.calculaBeacons()
+    beacons.getListaAdjacencias()
     with open("Trabalho-grafos/beacons.pickle", "wb") as f:
         pickle.dump(beacons, f)
 else:
@@ -47,8 +48,18 @@ for vertice in listaAdjPontos:
                 x2, y2 = info['coordenadas']
         ax.plot([x1, x2], [y1, y2], 'b-')   # 'b-' representa a linha azul
 
-plt.grid(True, color='grey', linewidth=0.5) # Adicionar a grade ao plano cartesiano
+# Plotar os beacons e suas conexões
+for i in range(len(beacons.beacons)):
+    for j in range(len(beacons.beacons[0])):
+        if beacons.beacons[i][j] != -1:
+            ax.plot(j, i, 'go')  # 'bo' representa o beacon azul
 
-print(proc.dijkstra(matrizAdjPontos, 0, 9))
+            for adj in beacons.listaAdjacencias[beacons.beacons[i][j]]:
+                for m in range(len(beacons.beacons)):
+                    for n in range(len(beacons.beacons[0])):
+                        if beacons.beacons[m][n] == adj:
+                            ax.plot([j, n], [i, m], 'g--')  # 'b--' representa a conexão entre beacons em linha tracejada
+
+plt.grid(True, color='grey', linewidth=0.5) # Adicionar a grade ao plano cartesiano
 
 plt.show()  # Mostrar o plano cartesiano

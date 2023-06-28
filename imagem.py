@@ -14,12 +14,12 @@ def image_to_matrix(image_path, width, height):
     matrix = []
     for i in range(0, len(pixels), width):
         row = pixels[i:i+width]
-        matrix.append([-1 if pixel == 255 else 0 for pixel in row])
+        matrix.append([-1 if pixel == 0 else 0 for pixel in row])
 
     return matrix
 
 # Exemplo de uso
-image_path = 'planta_com_vazios.png'
+image_path = 'Trabalho-grafos/planta_com_vazios.png'
 width = 72
 height = 64
 matrix = image_to_matrix(image_path, width, height)

@@ -80,3 +80,6 @@ def dijkstra(matriz, vOrigem, vDestino):
 def print_matrix(matrix):
     for row in matrix:
         print(' '.join('{:2d}'.format(pixel) for pixel in row))
+
+def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos):
+    pass

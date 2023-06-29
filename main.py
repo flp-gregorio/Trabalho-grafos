@@ -73,7 +73,7 @@ def plotarImagem(opcao1, opcao2):
 
     plt.show()  # Mostrar o plano cartesiano
 
-def navegar_jogo():
+def navegar_jogo(origem, caminho):
     # Carregar a imagem como plano de fundo
     plano_fundo_original = pygame.image.load('Trabalho-grafos/planta_com_vazios.png')
 
@@ -98,7 +98,14 @@ def navegar_jogo():
     pygame.display.set_caption('Navegação do Usuário')
 
     # Definir a posição inicial do usuário
-    posicao_usuario = [100, 100]
+    x, y = pontos[origem]['coordenadas']
+    posicao_usuario = [x*(largura_imagem/64), y*(altura_imagem/72)] # Ajustar a posição do usuário de acordo com a escala da imagem
+
+    # Definir a posição do destino
+    pOrigem = pontos[origem]['id']
+    pDestino = pontos[destino]['id']
+    caminho, distancia = proc.dijkstra(matrizAdjPontos, pOrigem, pDestino)
+    print("Distância total: {:.2f} metros".format(distancia))
 
     # Definir a velocidade de movimento do usuário
     velocidade_usuario = 5
@@ -121,6 +128,7 @@ def navegar_jogo():
                     posicao_usuario[0] -= velocidade_usuario
                 elif evento.key == pygame.K_RIGHT:
                     posicao_usuario[0] += velocidade_usuario
+                proc.processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos)
 
         # Limpar a tela
         janela.fill((0, 0, 0))
@@ -129,7 +137,7 @@ def navegar_jogo():
         janela.blit(plano_fundo, (0, 0))
 
         # Desenhar a posição do usuário na imagem
-        pygame.draw.circle(janela, (255, 0, 0), posicao_usuario, 10)
+        pygame.draw.circle(janela, (255, 0, 0), posicao_usuario, 5)
 
         # Atualizar a janela do jogo
         pygame.display.flip()
@@ -141,7 +149,6 @@ if __name__ == "__main__":
     op = 0
     op1 = 0
     op2 = 0
-
 
     while True:
         print("Selecione a ação desejada:")
@@ -180,7 +187,9 @@ if __name__ == "__main__":
                     continue
             plotarImagem(op1, op2)
         elif op == 2:
-            navegar_jogo()
+            origem = input("Digite o nome do ponto de origem: ")
+            destino = input("Digite o nome do ponto de destino: ")
+            navegar_jogo(origem, destino)
         elif op == 3:
             break
         else:

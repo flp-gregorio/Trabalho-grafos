@@ -6,7 +6,6 @@ import beacons as bea
 import processamento as proc
 import pickle
 import os.path
-import numpy as np
 
 alcance = 30
 

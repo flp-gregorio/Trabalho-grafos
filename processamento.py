@@ -81,5 +81,58 @@ def print_matrix(matrix):
     for row in matrix:
         print(' '.join('{:2d}'.format(pixel) for pixel in row))
 
+import math
+
 def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos):
-    pass
+    #Encontrar a posição do usuário no grafo baseado nos beacons próximos
+    posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, pontos, listaAdjPontos), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
+
+    # Realizar outras operações com os beacons encontrados, se necessário
+
+def encontrarBeaconsProximos(posicao_usuario, pontos, listaAdjPontos):
+    # Calcular a distância entre a posição do usuário e todos os beacons
+    distancias = {}
+    for ponto, info in pontos.items():
+        if info['tipo'] == 'beacon':
+            x, y = info['coordenadas']
+            distancia = distancia(posicao_usuario, (x, y))
+            distancias[ponto] = distancia
+
+    # Ordenar as distâncias em ordem crescente
+    distancias_ordenadas = sorted(distancias.items(), key=lambda x: x[1])
+
+    # Selecionar os 3 beacons mais próximos
+    beacons_proximos = []
+    for i in range(min(3, len(distancias_ordenadas))):
+        beacon = distancias_ordenadas[i][0]
+        beacons_proximos.append(beacon)
+
+    return beacons_proximos
+
+def encontrarPosicaoUsuario(beacons_proximos, pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario):
+    # Encontrar a posição do usuário no grafo baseado nos beacons próximos
+    distancias = []
+
+    for i in range(len(beacons_proximos)):
+        distancias.append(distancia(posicao_usuario, beacons_proximos[i]))
+
+    return trilateracao(distancias[0], distancias[1], distancias[2], beacons_proximos[0], beacons_proximos[1], beacons_proximos[2])
+
+def trilateracao(distanciaA, distanciaB, distanciaC, pontoA, pontoB, pontoC):
+    # Cálculo das diferenças de coordenadas
+    diff_AB = (pontoB[0] - pontoA[0], pontoB[1] - pontoA[1])
+    diff_AC = (pontoC[0] - pontoA[0], pontoC[1] - pontoA[1])
+
+    # Cálculo das distâncias entre os pontos de referência
+    d_AB = math.sqrt(diff_AB[0] ** 2 + diff_AB[1] ** 2)
+    d_AC = math.sqrt(diff_AC[0] ** 2 + diff_AC[1] ** 2)
+
+    # Cálculo das coordenadas de P
+    t = (distanciaA ** 2 - distanciaB ** 2 + d_AB ** 2) / (2 * d_AB)
+    x = (distanciaA ** 2 - distanciaC ** 2 + d_AC ** 2 + 2 * diff_AC[0] * t) / (2 * diff_AC[0])
+    y = ((distanciaA ** 2 - distanciaC ** 2 + d_AC ** 2 + 2 * diff_AC[0] * t) ** 2 - x ** 2) ** 0.5
+
+    # Coordenadas de P
+    pontoP = (pontoA[0] + x, pontoA[1] + y)
+
+    return pontoP

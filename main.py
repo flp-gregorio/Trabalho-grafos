@@ -154,7 +154,8 @@ if __name__ == "__main__":
         print("Selecione a ação desejada:")
         print("1 - Plotar imagem")
         print("2 - Simular")
-        print("3 - Sair")
+        print("3 - Beacons")
+        print("4 - Sair")
 
         op = int(input())
         
@@ -191,6 +192,8 @@ if __name__ == "__main__":
             destino = input("Digite o nome do ponto de destino: ")
             navegar_jogo(origem, destino)
         elif op == 3:
+            print(beacons)
+        elif op == 4:
             break
         else:
             print("Opção inválida")

@@ -208,19 +208,3 @@ class Beacons:
         ret += self.getListaAdjacencias() + "\n"
 
         return ret
-
-if __name__ == "__main__":
-    x = 80  # número de linhas
-    y = 70  # número de colunas
-    num_minus_ones = 2240  # quantidade de elementos -1
-
-    matriz = [[0] * y for _ in range(x)]
-
-    import random
-
-    for _ in range(num_minus_ones):
-        i = random.randint(0, x - 1)
-        j = random.randint(0, y - 1)
-        matriz[i][j] = -1
-
-    print(Beacons(matriz, 20, 3))

@@ -6,6 +6,7 @@ import beacons as bea
 import processamento as proc
 import pickle
 import os.path
+import pygame
 
 alcance = 30
 
@@ -72,6 +73,70 @@ def plotarImagem(opcao1, opcao2):
 
     plt.show()  # Mostrar o plano cartesiano
 
+def navegar_jogo():
+    # Carregar a imagem como plano de fundo
+    plano_fundo_original = pygame.image.load('Trabalho-grafos/planta_com_vazios.png')
+
+    # Definir a escala desejada para a imagem
+    escala = 0.2
+
+    # Redimensionar a imagem de fundo
+    largura_imagem_original, altura_imagem_original = plano_fundo_original.get_width(), plano_fundo_original.get_height()
+    largura_imagem = int(largura_imagem_original * escala)
+    altura_imagem = int(altura_imagem_original * escala)
+    plano_fundo = pygame.transform.scale(plano_fundo_original, (largura_imagem, altura_imagem))
+
+    # Inicializar o pygame
+    pygame.init()
+
+    # Definir as dimensões da janela do jogo
+    largura_janela = largura_imagem
+    altura_janela = altura_imagem
+
+    # Criar a janela do jogo
+    janela = pygame.display.set_mode((largura_janela, altura_janela))
+    pygame.display.set_caption('Navegação do Usuário')
+
+    # Definir a posição inicial do usuário
+    posicao_usuario = [100, 100]
+
+    # Definir a velocidade de movimento do usuário
+    velocidade_usuario = 5
+
+    # Loop principal do jogo
+    rodando = True
+    while rodando:
+        # Processar eventos do pygame
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                rodando = False
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    rodando = False
+                elif evento.key == pygame.K_UP:
+                    posicao_usuario[1] -= velocidade_usuario
+                elif evento.key == pygame.K_DOWN:
+                    posicao_usuario[1] += velocidade_usuario
+                elif evento.key == pygame.K_LEFT:
+                    posicao_usuario[0] -= velocidade_usuario
+                elif evento.key == pygame.K_RIGHT:
+                    posicao_usuario[0] += velocidade_usuario
+
+        # Limpar a tela
+        janela.fill((0, 0, 0))
+
+        # Desenhar o plano de fundo na janela
+        janela.blit(plano_fundo, (0, 0))
+
+        # Desenhar a posição do usuário na imagem
+        pygame.draw.circle(janela, (255, 0, 0), posicao_usuario, 10)
+
+        # Atualizar a janela do jogo
+        pygame.display.flip()
+
+    # Encerrar o pygame
+    pygame.quit()
+
 if __name__ == "__main__":
     op = 0
     op1 = 0
@@ -115,7 +180,7 @@ if __name__ == "__main__":
                     continue
             plotarImagem(op1, op2)
         elif op == 2:
-            pass
+            navegar_jogo()
         elif op == 3:
             break
         else:

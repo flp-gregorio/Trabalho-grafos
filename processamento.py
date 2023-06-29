@@ -85,29 +85,20 @@ import math
 
 def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos):
     #Encontrar a posição do usuário no grafo baseado nos beacons próximos
-    posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, pontos, listaAdjPontos), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
+    posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, matriz), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
 
     # Realizar outras operações com os beacons encontrados, se necessário
 
 def encontrarBeaconsProximos(posicao_usuario, pontos, listaAdjPontos):
-    # Calcular a distância entre a posição do usuário e todos os beacons
-    distancias = {}
-    for ponto, info in pontos.items():
-        if info['tipo'] == 'beacon':
-            x, y = info['coordenadas']
-            distancia = distancia(posicao_usuario, (x, y))
-            distancias[ponto] = distancia
+    beaconsProximos = []
 
-    # Ordenar as distâncias em ordem crescente
-    distancias_ordenadas = sorted(distancias.items(), key=lambda x: x[1])
+    for x in range(-self._alcance, self._alcance+1):
+        for y in range(-self._alcance, self._alcance+1):
+            if x**2 + y**2 <= self._alcance**2:  # verifica se a posição (x, y) está dentro do alcance circular
+                if i+x < 0 or i+x >= len(self._matriz) or j+y < 0 or j+y >= len(self._matriz[0]):  # verifica se a posição está dentro da matriz
+                    continue
 
-    # Selecionar os 3 beacons mais próximos
-    beacons_proximos = []
-    for i in range(min(3, len(distancias_ordenadas))):
-        beacon = distancias_ordenadas[i][0]
-        beacons_proximos.append(beacon)
-
-    return beacons_proximos
+    return beaconsProximos
 
 def encontrarPosicaoUsuario(beacons_proximos, pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario):
     # Encontrar a posição do usuário no grafo baseado nos beacons próximos

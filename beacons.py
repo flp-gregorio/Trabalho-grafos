@@ -197,6 +197,8 @@ class Beacons:
     def __str__(self):
         ret = ""
 
+        ret += "Cobertura mínima: " + str(self.coberturaMin) + "\n\n"
+        ret += "Alcance: " + str(self.alcance) + "\n\n"
         ret += "Matriz de cobertura:\n"
         ret += self.getMatriz() + "\n\n"
         ret += "Matriz de beacons:\n"

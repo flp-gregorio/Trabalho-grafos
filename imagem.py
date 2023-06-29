@@ -17,7 +17,3 @@ def image_to_matrix(image_path, width, height):
         matrix.append([-1 if pixel == 0 else 0 for pixel in row])
 
     return matrix
-
-def print_matrix(matrix):
-    for row in matrix:
-        print(' '.join('{:2d}'.format(pixel) for pixel in row))

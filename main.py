@@ -8,9 +8,11 @@ import pickle
 import os.path
 import numpy as np
 
+alcance = 30
+
 if not os.path.isfile("Trabalho-grafos/beacons.pickle"):
     matriz = im.image_to_matrix('Trabalho-grafos/planta_com_vazios.png', 72, 64)
-    beacons = bea.Beacons(matriz, 42, 3)
+    beacons = bea.Beacons(matriz, alcance, 3)
     beacons.calculaBeacons()
     beacons.getListaAdjacencias()
     with open("Trabalho-grafos/beacons.pickle", "wb") as f:
@@ -53,12 +55,17 @@ for i in range(len(beacons.beacons)):
     for j in range(len(beacons.beacons[0])):
         if beacons.beacons[i][j] != -1:
             ax.plot(j, i, 'go')  # 'go' representa o beacon azul
+            ax.annotate(beacons.beacons[i][j], (j, i), xytext=(5, 5), textcoords='offset points')
 
             for adj in beacons.listaAdjacencias[beacons.beacons[i][j]]:
                 for m in range(len(beacons.beacons)):
                     for n in range(len(beacons.beacons[0])):
                         if beacons.beacons[m][n] == adj:
                             ax.plot([j, n], [i, m], 'g--')  # 'g--' representa a conexão entre beacons em linha tracejada
+
+            # Adicionar o círculo em torno do beacon
+            circle = plt.Circle((j, i), radius=alcance, color='g', fill=False)
+            ax.add_artist(circle)
 
 plt.grid(True, color='grey', linewidth=0.5) # Adicionar a grade ao plano cartesiano
 

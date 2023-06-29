@@ -78,7 +78,7 @@ if __name__ == "__main__":
     op2 = 0
 
 
-    while 1:
+    while True:
         print("Selecione a ação desejada:")
         print("1 - Plotar imagem")
         print("2 - Simular")
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         op = int(input())
         
         if op == 1:
-            while 1:
+            while True:
                 print("Com beacons ou sem beacons?")
                 print("1 - Com beacons")
                 print("2 - Sem beacons")

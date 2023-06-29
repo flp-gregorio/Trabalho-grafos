@@ -21,9 +21,10 @@ else:
     with open("Trabalho-grafos/beacons.pickle", "rb") as f:
         beacons = pickle.load(f)
 
-def plotarImagem(opcao1, opcao2):
-    dataset = pd.read_csv('Trabalho-grafos/coords.csv')  # Extrair as informações dos beacons
+dataset = pd.read_csv('Trabalho-grafos/coords.csv')  # Extrair as informações dos beacons
+pontos, listaAdjPontos, matrizAdjPontos = proc.criar_pontos(dataset)  # Extrair as informações dos pontos
 
+def plotarImagem(opcao1, opcao2):
     # Carregar a imagem png como plano de fundo
     plano_fundo = mpimg.imread(r'Trabalho-grafos/planta_com_vazios.png')
 
@@ -32,8 +33,6 @@ def plotarImagem(opcao1, opcao2):
 
     # Definir a imagem JPEG como plano de fundo
     ax.imshow(plano_fundo, extent=[0, 72, 64, 0])  # Definir os limites do plano cartesiano
-
-    pontos, listaAdjPontos, matrizAdjPontos = proc.criar_pontos(dataset)  # Extrair as informações dos pontos
 
     for ponto, info in pontos.items():
         nome = info['nome']

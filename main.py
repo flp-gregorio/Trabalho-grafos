@@ -128,7 +128,7 @@ def navegar_jogo(origem, caminho):
                     posicao_usuario[0] -= velocidade_usuario
                 elif evento.key == pygame.K_RIGHT:
                     posicao_usuario[0] += velocidade_usuario
-                proc.processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos)
+                proc.processaPosicao((float(posicao_usuario[0] / (largura_imagem / 64)), float(posicao_usuario[1] / (altura_imagem / 72))), destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons)
 
         # Limpar a tela
         janela.fill((0, 0, 0))

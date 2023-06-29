@@ -83,22 +83,26 @@ def print_matrix(matrix):
 
 import math
 
-def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos):
+def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons):
     #Encontrar a posição do usuário no grafo baseado nos beacons próximos
-    posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, matriz), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
+    posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, beacons), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
 
-    # Realizar outras operações com os beacons encontrados, se necessário
+    print('Posição calculada: {}'.format(posicaoCalc))
 
-def encontrarBeaconsProximos(posicao_usuario, pontos, listaAdjPontos):
-    beaconsProximos = []
+def encontrarBeaconsProximos(posicao_usuario, beacons):
+    i, j = posicao_usuario
+    beaconsEncontrados = []
 
-    for x in range(-self._alcance, self._alcance+1):
-        for y in range(-self._alcance, self._alcance+1):
-            if x**2 + y**2 <= self._alcance**2:  # verifica se a posição (x, y) está dentro do alcance circular
-                if i+x < 0 or i+x >= len(self._matriz) or j+y < 0 or j+y >= len(self._matriz[0]):  # verifica se a posição está dentro da matriz
+    for x in range(-beacons.alcance, beacons.alcance + 1):
+        for y in range(-beacons.alcance, beacons.alcance + 1):
+            if x**2 + y**2 <= beacons.alcance**2:  # verifica se a posição (x, y) está dentro do alcance circular
+                if i + x < 0 or i + x >= len(beacons.beacons) or j + y < 0 or j + y >= len(beacons.beacons[0]):  # verifica se a posição está dentro da matriz de beacons
                     continue
-
-    return beaconsProximos
+                elif beacons.beacons[x][y] != -1:  # verifica se há um beacon na posição (x, y)
+                    beaconsEncontrados.append((x, y))
+                    if len(beaconsEncontrados) == 3:    #encerra a busca quando encontrar 3 beacons
+                        print('Beacons encontrados: {}'.format(beaconsEncontrados))
+                        return beaconsEncontrados
 
 def encontrarPosicaoUsuario(beacons_proximos, pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario):
     # Encontrar a posição do usuário no grafo baseado nos beacons próximos

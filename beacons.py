@@ -79,6 +79,7 @@ class Beacons:
     def listaAdjacencias(self, listaAdjacencias):
         self._listaAdjacencias = listaAdjacencias
 
+    #Complexidade: O(x*y*((2alcance)^2)*coberturaMin)
     def calculaBeacons(self):
         for i in range(len(self._matriz)):
             for j in range(len(self._matriz[0])):

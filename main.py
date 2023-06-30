@@ -11,7 +11,7 @@ import pygame
 alcance = 30
 
 if not os.path.isfile("Trabalho-grafos/beacons.pickle"):
-    matriz = im.image_to_matrix('Trabalho-grafos/planta_com_vazios.png', 72, 64)
+    matriz = im.image_to_matrix('Trabalho-grafos/planta_com_vazios.png', 64, 72)
     beacons = bea.Beacons(matriz, alcance, 3)
     beacons.calculaBeacons()
     beacons.getListaAdjacencias()
@@ -32,7 +32,7 @@ def plotarImagem(opcao1, opcao2):
     fig, ax = plt.subplots()
 
     # Definir a imagem JPEG como plano de fundo
-    ax.imshow(plano_fundo, extent=[0, 72, 64, 0])  # Definir os limites do plano cartesiano
+    ax.imshow(plano_fundo, extent=[0, 64, 72, 0])  # Definir os limites do plano cartesiano
 
     for ponto, info in pontos.items():
         nome = info['nome']
@@ -128,7 +128,7 @@ def navegar_jogo(origem, caminho):
                     posicao_usuario[0] -= velocidade_usuario
                 elif evento.key == pygame.K_RIGHT:
                     posicao_usuario[0] += velocidade_usuario
-                proc.processaPosicao((float(posicao_usuario[0] / (largura_imagem / 64)), float(posicao_usuario[1] / (altura_imagem / 72))), destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons)
+                proc.processaPosicao((int(posicao_usuario[0] / (largura_imagem / 64)), int(posicao_usuario[1] / (altura_imagem / 72))), destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons)
 
         # Limpar a tela
         janela.fill((0, 0, 0))

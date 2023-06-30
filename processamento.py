@@ -87,6 +87,7 @@ def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjP
     #Encontrar a posição do usuário no grafo baseado nos beacons próximos
     posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, beacons), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
 
+    print(posicao_usuario)
     print('Posição calculada: {}'.format(posicaoCalc))
 
 def encontrarBeaconsProximos(posicao_usuario, beacons):
@@ -98,8 +99,8 @@ def encontrarBeaconsProximos(posicao_usuario, beacons):
             if x**2 + y**2 <= beacons.alcance**2:  # verifica se a posição (x, y) está dentro do alcance circular
                 if i + x < 0 or i + x >= len(beacons.beacons) or j + y < 0 or j + y >= len(beacons.beacons[0]):  # verifica se a posição está dentro da matriz de beacons
                     continue
-                elif beacons.beacons[x][y] != -1:  # verifica se há um beacon na posição (x, y)
-                    beaconsEncontrados.append((x, y))
+                elif beacons.beacons[x+i][y+j] != -1:  # verifica se há um beacon na posição (x, y)
+                    beaconsEncontrados.append((y+j, x+i))
                     if len(beaconsEncontrados) == 3:    #encerra a busca quando encontrar 3 beacons
                         print('Beacons encontrados: {}'.format(beaconsEncontrados))
                         return beaconsEncontrados
@@ -110,24 +111,23 @@ def encontrarPosicaoUsuario(beacons_proximos, pontos, listaAdjPontos, matrizAdjP
 
     for i in range(len(beacons_proximos)):
         distancias.append(distancia(posicao_usuario, beacons_proximos[i]))
+        print('Distância do beacon {}: {}'.format(i+1, distancias[i]))
 
     return trilateracao(distancias[0], distancias[1], distancias[2], beacons_proximos[0], beacons_proximos[1], beacons_proximos[2])
 
-def trilateracao(distanciaA, distanciaB, distanciaC, pontoA, pontoB, pontoC):
-    # Cálculo das diferenças de coordenadas
-    diff_AB = (pontoB[0] - pontoA[0], pontoB[1] - pontoA[1])
-    diff_AC = (pontoC[0] - pontoA[0], pontoC[1] - pontoA[1])
+def trilateracao(d1, d2, d3, p1, p2, p3):
+    x1, y1 = p1
+    x2, y2 = p2
+    x3, y3 = p3
 
-    # Cálculo das distâncias entre os pontos de referência
-    d_AB = math.sqrt(diff_AB[0] ** 2 + diff_AB[1] ** 2)
-    d_AC = math.sqrt(diff_AC[0] ** 2 + diff_AC[1] ** 2)
+    A = 2 * (x2 - x1)
+    B = 2 * (y2 - y1)
+    C = d1**2 - d2**2 - x1**2 + x2**2 - y1**2 + y2**2
+    D = 2 * (x3 - x2)
+    E = 2 * (y3 - y2)
+    F = d2**2 - d3**2 - x2**2 + x3**2 - y2**2 + y3**2
 
-    # Cálculo das coordenadas de P
-    t = (distanciaA ** 2 - distanciaB ** 2 + d_AB ** 2) / (2 * d_AB)
-    x = (distanciaA ** 2 - distanciaC ** 2 + d_AC ** 2 + 2 * diff_AC[0] * t) / (2 * diff_AC[0])
-    y = ((distanciaA ** 2 - distanciaC ** 2 + d_AC ** 2 + 2 * diff_AC[0] * t) ** 2 - x ** 2) ** 0.5
+    x = (C*E - F*B) / (E*A - B*D)
+    y = (C*D - A*F) / (B*D - A*E)
 
-    # Coordenadas de P
-    pontoP = (pontoA[0] + x, pontoA[1] + y)
-
-    return pontoP
+    return x, y

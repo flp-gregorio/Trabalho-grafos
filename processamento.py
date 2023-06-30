@@ -127,7 +127,7 @@ def trilateracao(d1, d2, d3, p1, p2, p3):
     E = 2 * (y3 - y2)
     F = d2**2 - d3**2 - x2**2 + x3**2 - y2**2 + y3**2
 
-    x = (C*E - F*B) / (E*A - B*D)
-    y = (C*D - A*F) / (B*D - A*E)
+    x = (C*E - F*B) / ((E*A - B*D)+0.001)
+    y = (C*D - A*F) / ((B*D - A*E)+0.001)
 
     return x, y

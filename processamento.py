@@ -100,10 +100,11 @@ def encontrarBeaconsProximos(posicao_usuario, beacons):
                 if i + x < 0 or i + x >= len(beacons.beacons) or j + y < 0 or j + y >= len(beacons.beacons[0]):  # verifica se a posição está dentro da matriz de beacons
                     continue
                 elif beacons.beacons[x+i][y+j] != -1:  # verifica se há um beacon na posição (x, y)
-                    beaconsEncontrados.append((y+j, x+i))
-                    if len(beaconsEncontrados) == 3:    #encerra a busca quando encontrar 3 beacons
-                        print('Beacons encontrados: {}'.format(beaconsEncontrados))
-                        return beaconsEncontrados
+                    beaconsEncontrados.append((x+i, y+j))
+                if len(beaconsEncontrados) == 3:    #encerra a busca quando encontrar 3 beacons
+                    print('Beacons encontrados: {}'.format(beaconsEncontrados))
+                    return beaconsEncontrados
+    return beaconsEncontrados
 
 def encontrarPosicaoUsuario(beacons_proximos, pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario):
     # Encontrar a posição do usuário no grafo baseado nos beacons próximos

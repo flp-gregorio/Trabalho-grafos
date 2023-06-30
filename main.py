@@ -108,7 +108,7 @@ def navegar_jogo(origem, caminho):
     print("Distância total: {:.2f} metros".format(distancia))
 
     # Definir a velocidade de movimento do usuário
-    velocidade_usuario = 5
+    velocidade_usuario = 3
 
     # Loop principal do jogo
     rodando = True
@@ -128,7 +128,7 @@ def navegar_jogo(origem, caminho):
                     posicao_usuario[0] -= velocidade_usuario
                 elif evento.key == pygame.K_RIGHT:
                     posicao_usuario[0] += velocidade_usuario
-                proc.processaPosicao((int(posicao_usuario[0] / (largura_imagem / 64)), int(posicao_usuario[1] / (altura_imagem / 72))), destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons)
+                proc.processaPosicao((int(posicao_usuario[0] / (largura_imagem / 64)), int(posicao_usuario[1] / (altura_imagem / 72))), destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons, evento.key)
 
         # Limpar a tela
         janela.fill((0, 0, 0))

@@ -83,12 +83,36 @@ def print_matrix(matrix):
 
 import math
 
-def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons):
+def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjPontos, matrizAdjPontos, beacons, botao):
     #Encontrar a posição do usuário no grafo baseado nos beacons próximos
     posicaoCalc = encontrarPosicaoUsuario(encontrarBeaconsProximos(posicao_usuario, beacons), pontos, listaAdjPontos, matrizAdjPontos, posicao_usuario)
 
-    print(posicao_usuario)
-    print('Posição calculada: {}'.format(posicaoCalc))
+    xCalc, yCalc = posicaoCalc
+    xDestino, yDestino = pontos[destino]['coordenadas']
+
+    if int(xCalc/2) == int(xDestino/2) and int(yCalc/2) == int(yDestino/2):
+        print('\nVocê chegou ao seu destino!')
+    else:
+        for p in pontos:
+            xPonto, yPonto = pontos[p]['coordenadas']
+            if int(xCalc/2) == int(xPonto/2) and int(yCalc/2) == int(yPonto/2):
+                caminho, dist = dijkstra(matrizAdjPontos, pontos[p]['id'], pontos[destino]['id'])
+                print(caminho)
+                for ponto in pontos:
+                    if pontos[ponto]['id'] == caminho[1]:
+                        proxPonto = pontos[ponto]['coordenadas']
+                        break
+                if posicaoCalc[1]-proxPonto[1] < posicaoCalc[0]-proxPonto[0]:
+                    if posicaoCalc[0] > proxPonto[0]:
+                        print('\nVá para a esquerda por {:.2f} metros'.format(distancia(posicaoCalc, proxPonto)))
+                    else:
+                        print('\nVá para a direita por {:.2f} metros'.format(distancia(posicaoCalc, proxPonto)))
+                else:
+                    if posicaoCalc[1] > proxPonto[1]:
+                        print('\nVá para baixo por {:.2f} metros'.format(distancia(posicaoCalc, proxPonto)))
+                    else:
+                        print('\nVá para cima por {:.2f} metros'.format(distancia(posicaoCalc, proxPonto)))
+                break
 
 def encontrarBeaconsProximos(posicao_usuario, beacons):
     i, j = posicao_usuario
@@ -102,7 +126,6 @@ def encontrarBeaconsProximos(posicao_usuario, beacons):
                 elif beacons.beacons[x+i][y+j] != -1:  # verifica se há um beacon na posição (x, y)
                     beaconsEncontrados.append((x+i, y+j))
                 if len(beaconsEncontrados) == 3:    #encerra a busca quando encontrar 3 beacons
-                    print('Beacons encontrados: {}'.format(beaconsEncontrados))
                     return beaconsEncontrados
     return beaconsEncontrados
 
@@ -112,7 +135,6 @@ def encontrarPosicaoUsuario(beacons_proximos, pontos, listaAdjPontos, matrizAdjP
 
     for i in range(len(beacons_proximos)):
         distancias.append(distancia(posicao_usuario, beacons_proximos[i]))
-        print('Distância do beacon {}: {}'.format(i+1, distancias[i]))
 
     return trilateracao(distancias[0], distancias[1], distancias[2], beacons_proximos[0], beacons_proximos[1], beacons_proximos[2])
 

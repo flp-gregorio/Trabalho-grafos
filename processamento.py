@@ -97,7 +97,6 @@ def processaPosicao(posicao_usuario, destino, origem, caminho, pontos, listaAdjP
             xPonto, yPonto = pontos[p]['coordenadas']
             if int(xCalc/2) == int(xPonto/2) and int(yCalc/2) == int(yPonto/2):
                 caminho, dist = dijkstra(matrizAdjPontos, pontos[p]['id'], pontos[destino]['id'])
-                print(caminho)
                 for ponto in pontos:
                     if pontos[ponto]['id'] == caminho[1]:
                         proxPonto = pontos[ponto]['coordenadas']

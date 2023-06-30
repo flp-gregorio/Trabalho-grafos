@@ -10,23 +10,23 @@ import pygame
 
 alcance = 30
 
-if not os.path.isfile("Trabalho-grafos/beacons.pickle"):
-    matriz = im.image_to_matrix('Trabalho-grafos/planta_com_vazios.png', 64, 72)
+if not os.path.isfile("./beacons.pickle"):
+    matriz = im.image_to_matrix('./planta_com_vazios.png', 64, 72)
     beacons = bea.Beacons(matriz, alcance, 3)
     beacons.calculaBeacons()
     beacons.getListaAdjacencias()
-    with open("Trabalho-grafos/beacons.pickle", "wb") as f:
+    with open("./beacons.pickle", "wb") as f:
         pickle.dump(beacons, f)
 else:
-    with open("Trabalho-grafos/beacons.pickle", "rb") as f:
+    with open("./beacons.pickle", "rb") as f:
         beacons = pickle.load(f)
 
-dataset = pd.read_csv('Trabalho-grafos/coords.csv')  # Extrair as informações dos beacons
+dataset = pd.read_csv('./coords.csv')  # Extrair as informações dos beacons
 pontos, listaAdjPontos, matrizAdjPontos = proc.criar_pontos(dataset)  # Extrair as informações dos pontos
 
 def plotarImagem(opcao1, opcao2):
     # Carregar a imagem png como plano de fundo
-    plano_fundo = mpimg.imread(r'Trabalho-grafos/planta_com_vazios.png')
+    plano_fundo = mpimg.imread(r'./planta_com_vazios.png')
 
     # Criar o plano cartesiano
     fig, ax = plt.subplots()
@@ -75,7 +75,7 @@ def plotarImagem(opcao1, opcao2):
 
 def navegar_jogo(origem, caminho):
     # Carregar a imagem como plano de fundo
-    plano_fundo_original = pygame.image.load('Trabalho-grafos/planta_com_vazios.png')
+    plano_fundo_original = pygame.image.load('./planta_com_vazios.png')
 
     # Definir a escala desejada para a imagem
     escala = 0.2
